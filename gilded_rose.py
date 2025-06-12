@@ -27,32 +27,34 @@ class GildedRose(object):
             self.update_quality_single(item)
 
     def update_quality_single(self, item):
-        if item.name != AGED_BRIE and item.name != BACKSTAGE:
-            if item.quality > 0:
-                if item.name != SULFURUS:
-                    item.quality = item.quality - 1
-        else:
-            if item.quality < max_quality:
-                item.quality = item.quality + 1
-                if item.name == BACKSTAGE:
-                    if item.sell_in < 11:
-                        if item.quality < max_quality:
-                            item.quality = item.quality + 1
-                    if item.sell_in < 6:
-                        if item.quality < max_quality:
-                            item.quality = item.quality + 1
-        if item.name != SULFURUS:
+        if item.name == SULFURUS:
+            pass
+        else: 
             item.sell_in = item.sell_in - 1
+        
+        if item.name != AGED_BRIE and item.name != BACKSTAGE:
+            if item.name != SULFURUS:
+                decrease_item_quality(item)
+        else:
+            increase_item_quality(item)
+            if item.name == BACKSTAGE:
+                if item.sell_in < 10:
+                    increase_item_quality(item)
+                if item.sell_in < 5:
+                    increase_item_quality(item)
+                    
+                    
+                    
         if item.sell_in < 0:
-            if item.name != AGED_BRIE:
-                if item.name != BACKSTAGE:
-                    if item.quality > 0:
-                        if item.name != SULFURUS:
-                            item.quality = item.quality - 1
-                else:
-                    item.quality = item.quality - item.quality
+            if item.name == AGED_BRIE:
+                increase_item_quality(item)
             else:
-                if item.quality < max_quality:
-                    item.quality = item.quality + 1
-
+                if item.name == BACKSTAGE:
+                    item.quality = 0
+                else:
+                    if item.name == SULFURUS:
+                        pass
+                    else:
+                        decrease_item_quality(item)          
+                
 

@@ -1,11 +1,20 @@
 # -*- coding: utf-8 -*-
 
-QualityCap = 50
+from item import Item
+
+max_quality = 50
 
 ## NAMES
 AGED_BRIE = "Aged Brie"
 SULFURUS = "Sulfuras, Hand of Ragnaros"
 BACKSTAGE = "Backstage passes to a TAFKAL80ETC concert"
+
+def decrease_item_quality(item: Item, amount: int = 1) -> None:
+    item.quality = max(0, item.quality - amount)
+
+def increase_item_quality(item: Item, amount: int = 1) -> None:
+    item.quality = min(max_quality, item.quality + amount)
+
 
 
 class GildedRose(object):
@@ -15,40 +24,35 @@ class GildedRose(object):
 
     def update_quality(self):
         for item in self.items:
-            if item.name != AGED_BRIE and item.name != BACKSTAGE:
-                if item.quality > 0:
-                    if item.name != SULFURUS:
-                        item.quality = item.quality - 1
-            else:
-                if item.quality < QualityCap:
-                    item.quality = item.quality + 1
-                    if item.name == BACKSTAGE:
-                        if item.sell_in < 11:
-                            if item.quality < QualityCap:
-                                item.quality = item.quality + 1
-                        if item.sell_in < 6:
-                            if item.quality < QualityCap:
-                                item.quality = item.quality + 1
-            if item.name != SULFURUS:
-                item.sell_in = item.sell_in - 1
-            if item.sell_in < 0:
-                if item.name != AGED_BRIE:
-                    if item.name != BACKSTAGE:
-                        if item.quality > 0:
-                            if item.name != SULFURUS:
-                                item.quality = item.quality - 1
-                    else:
-                        item.quality = item.quality - item.quality
+            self.update_quality_single(item)
+
+    def update_quality_single(self, item):
+        if item.name != AGED_BRIE and item.name != BACKSTAGE:
+            if item.quality > 0:
+                if item.name != SULFURUS:
+                    item.quality = item.quality - 1
+        else:
+            if item.quality < max_quality:
+                item.quality = item.quality + 1
+                if item.name == BACKSTAGE:
+                    if item.sell_in < 11:
+                        if item.quality < max_quality:
+                            item.quality = item.quality + 1
+                    if item.sell_in < 6:
+                        if item.quality < max_quality:
+                            item.quality = item.quality + 1
+        if item.name != SULFURUS:
+            item.sell_in = item.sell_in - 1
+        if item.sell_in < 0:
+            if item.name != AGED_BRIE:
+                if item.name != BACKSTAGE:
+                    if item.quality > 0:
+                        if item.name != SULFURUS:
+                            item.quality = item.quality - 1
                 else:
-                    if item.quality < QualityCap:
-                        item.quality = item.quality + 1
+                    item.quality = item.quality - item.quality
+            else:
+                if item.quality < max_quality:
+                    item.quality = item.quality + 1
 
 
-class Item:
-    def __init__(self, name, sell_in, quality):
-        self.name = name
-        self.sell_in = sell_in
-        self.quality = quality
-
-    def __repr__(self):
-        return "%s, %s, %s" % (self.name, self.sell_in, self.quality)

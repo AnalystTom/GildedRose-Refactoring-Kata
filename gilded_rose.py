@@ -15,7 +15,18 @@ def decrease_item_quality(item: Item, amount: int = 1) -> None:
 def increase_item_quality(item: Item, amount: int = 1) -> None:
     item.quality = min(max_quality, item.quality + amount)
 
+def decrease_sell_in(item: Item, amount: int = 1) -> None:
+    item.sell_in = item.sell_in - amount
+    
+def increase_sell_in(item: Item, amount: int = 1) -> None:
+    item.sell_in = item.sell_in + amount
 
+def update_backstage(item: Item) -> None:
+    increase_item_quality(item)
+    if item.sell_in < 10:
+        increase_item_quality(item)
+    if item.sell_in < 5:
+        increase_item_quality(item)
 
 class GildedRose(object):
 
@@ -30,31 +41,26 @@ class GildedRose(object):
         if item.name == SULFURUS:
             pass
         else: 
-            item.sell_in = item.sell_in - 1
+            decrease_sell_in(item)
         
-        if item.name != AGED_BRIE and item.name != BACKSTAGE:
-            if item.name != SULFURUS:
-                decrease_item_quality(item)
-        else:
-            increase_item_quality(item)
-            if item.name == BACKSTAGE:
-                if item.sell_in < 10:
-                    increase_item_quality(item)
-                if item.sell_in < 5:
-                    increase_item_quality(item)
-                    
-                    
-                    
-        if item.sell_in < 0:
-            if item.name == AGED_BRIE:
+        if item.name == SULFURUS:
+            pass
+        elif item.name == AGED_BRIE:
+            if item.sell_in < 0:
                 increase_item_quality(item)
             else:
-                if item.name == BACKSTAGE:
-                    item.quality = 0
-                else:
-                    if item.name == SULFURUS:
-                        pass
-                    else:
-                        decrease_item_quality(item)          
-                
+                increase_item_quality(item)
+        elif item.name == BACKSTAGE:
+            if item.sell_in < 0:
+                item.quality = 0
+            else:
+                update_backstage(item)
+        else:
+            decrease_item_quality(item)
+            if item.sell_in < 0:
+                decrease_item_quality(item)
+            
+        
+        
+            
 

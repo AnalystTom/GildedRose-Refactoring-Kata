@@ -6,7 +6,7 @@ def test_general():
     gilded_rose.update_quality()
     assert items[0].name == "foo"
     
-def test_item_sell_in_decreases():
+def test_item_sell_decreases():
     items = [Item("foo", 10, 10)]
     gilded_rose = GildedRose(items)
     gilded_rose.update_quality()

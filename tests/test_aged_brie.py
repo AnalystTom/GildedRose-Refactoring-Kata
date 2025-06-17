@@ -1,9 +1,12 @@
-from gilded_rose import GildedRose, Item
+from gilded_rose import (
+    Item,
+    update_quality,
+)
 
-def test_aged_brie_quality_increases():
-    items = [Item("Aged Brie", 10, 10)]
-    gilded_rose = GildedRose(items)
-    gilded_rose.update_quality()
-    assert items[0].quality == 11
-    
-    
+AGED_BRIE = "Aged Brie"
+
+
+def test_aged_brie_increases_quality():
+    item = Item(AGED_BRIE, 0, 0)
+    update_quality([item])
+    assert 2 == item.quality

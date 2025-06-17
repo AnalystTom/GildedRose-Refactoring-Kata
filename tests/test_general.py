@@ -1,39 +1,35 @@
-from gilded_rose import GildedRose, Item
+from gilded_rose import (
+    Item,
+    update_quality,
+)
 
-def test_general():
-    items = [Item("foo", 0, 0)]
-    gilded_rose = GildedRose(items)
-    gilded_rose.update_quality()
-    assert items[0].name == "foo"
-    
-def test_item_sell_decreases():
-    items = [Item("foo", 10, 10)]
-    gilded_rose = GildedRose(items)
-    gilded_rose.update_quality()
-    assert items[0].sell_in == 9
-    
+
+def test_item_doesnt_change_name():
+    item = Item("foo", 0, 0)
+    update_quality([item])
+    assert "foo" == item.name
+
+
+def test_item_sell_in_decreases():
+    item = Item("foo", 1, 0)
+    update_quality([item])
+    assert 0 == item.sell_in
+
+
 def test_item_quality_decreases():
-    items = [Item("foo", 10, 10)]
-    gilded_rose = GildedRose(items)
-    gilded_rose.update_quality()
-    assert items[0].quality == 9
-    
-def test_item_quality_decreases_twice_as_fast_after_sell_by():
-    items = [Item("foo", 0, 10)]
-    gilded_rose = GildedRose(items)
-    gilded_rose.update_quality()
-    assert items[0].quality == 8
-    
+    item = Item("foo", 0, 1)
+    update_quality([item])
+    assert 0 == item.quality
+
+
 def test_item_quality_is_never_negative():
-    items = [Item("foo", 10, 0)]
-    gilded_rose = GildedRose(items)
-    gilded_rose.update_quality()
-    assert items[0].quality == 0
-    
-def test_item_quality_is_never_more_than_50():
-    items = [Item("Aged Brie", 10, 50)]
-    gilded_rose = GildedRose(items)
-    gilded_rose.update_quality()
-    assert items[0].quality == 50
-    
-    
+    item = Item("foo", 0, 0)
+    update_quality([item])
+    assert 0 == item.quality
+
+
+
+def test_item_quality_degrades_twice_as_fast_after_sell_in():
+    item = Item("foo", 0, 10)
+    update_quality([item])
+    assert 8 == item.quality

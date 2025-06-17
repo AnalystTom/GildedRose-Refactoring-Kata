@@ -1,10 +1,18 @@
-from gilded_rose import GildedRose, Item
+from gilded_rose import (
+    Item,
+    update_quality,
+)
 
-SULFURUS = "Sulfuras, Hand of Ragnaros"
+SULFURAS = "Sulfuras, Hand of Ragnaros"
 
-def test_sulfuras_quality_never_changes():
-    items = [Item(SULFURUS, 10, 10)]
-    gilded_rose = GildedRose(items)
-    gilded_rose.update_quality()
-    assert items[0].quality == 10
-    assert items[0].sell_in == 10
+
+def test_item_sulfuras_sell_in_doesnt_decrease():
+    item = Item(SULFURAS, 1, 0)
+    update_quality([item])
+    assert 1 == item.sell_in
+
+
+def test_item_sulfuras_quality_doesnt_decrease():
+    item = Item(SULFURAS, 1, 80)
+    update_quality([item])
+    assert 80 == item.quality

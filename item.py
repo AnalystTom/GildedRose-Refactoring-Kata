@@ -1,3 +1,4 @@
+# Item class
 class Item:
     def __init__(self, name, sell_in, quality):
         self.name = name

@@ -1,31 +1,30 @@
-from gilded_rose import GildedRose, Item
+from gilded_rose import (
+    Item,
+    update_quality,
+)
 
-BACKSTAGE = "Backstage passes to a TAFKAL80ETC concert"
+BACKSTAGE_PASSES = "Backstage passes to a TAFKAL80ETC concert"
 
-def test_backstage_quality_increases():
-    items = [Item(BACKSTAGE, 11, 0)]
-    gilded_rose = GildedRose(items)
-    gilded_rose.update_quality()
-    assert items[0].quality == 1
-    
-    
-def test_backstage_quality_increases_by_2_when_sell_in_is_less_than_10():
-    items = [Item(BACKSTAGE, 9, 10)]
-    gilded_rose = GildedRose(items)
-    gilded_rose.update_quality()
-    assert items[0].quality == 12
-    
-    
-def test_backstage_quality_increases_by_3_when_sell_in_is_less_than_5():
-    items = [Item(BACKSTAGE, 4, 10)]
-    gilded_rose = GildedRose(items)
-    gilded_rose.update_quality()
-    assert items[0].quality == 13
-    
-    
-def test_backstage_quality_drops_to_0_after_concert():
-    items = [Item(BACKSTAGE, 0, 10)]
-    gilded_rose = GildedRose(items)
-    gilded_rose.update_quality()
-    assert items[0].quality == 0
-    
+
+def test_backstage_passes_increase_quality():
+    item = Item(BACKSTAGE_PASSES, 11, 0)
+    update_quality([item])
+    assert 1 == item.quality
+
+
+def test_backstage_passes_increase_quality_by_2_when_sell_in_is_10_or_less():
+    item = Item(BACKSTAGE_PASSES, 10, 0)
+    update_quality([item])
+    assert 2 == item.quality
+
+
+def test_backstage_passes_increase_quality_by_3_when_sell_in_is_5_or_less():
+    item = Item(BACKSTAGE_PASSES, 5, 0)
+    update_quality([item])
+    assert 3 == item.quality
+
+
+def test_backstage_passes_quality_is_0_when_sell_in_is_0():
+    item = Item(BACKSTAGE_PASSES, 0, 10)
+    update_quality([item])
+    assert 0 == item.quality
